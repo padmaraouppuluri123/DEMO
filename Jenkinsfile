@@ -19,20 +19,12 @@ pipeline {
             steps {
                 sh 'docker build -t ${DOCKER_IMAGE} .'
             }
-        }
-        stage('Docker Login') {
-            steps {
-                script {
-                    // Login to Docker Hub using your credentials
-                    withDockerRegistry([credentialsId: 'dockerhub-credential', url: 'https://registry.hub.docker.com']) {
-                    sh 'docker push ${DOCKER_IMAGE}'
-                }
-                }  
-            }
+
         }
         stage('Push Docker Image') {
             steps {
                 script {
+                    withDockerRegistry([credentialsId: 'dockerhub-credential', url: 'https://registry.hub.docker.com']) {
                     // Push the image to Docker Hub
                     sh 'docker push ${DOCKER_IMAGE}'
                 }
