@@ -1,33 +1,44 @@
 pipeline {
     agent any
-
-    // Configure tools (Maven in this case)
-    tools {
-        maven 'Maven' // Ensure this matches the name of the Maven installation configured in Jenkins
+    environment {
+        REPO_URL = 'https://github.com/padmaraouppuluri123/DEMO.git'
+        DOCKER_IMAGE = 'padmaraouppuluri/padmaraodocker:image'  // Docker image in Docker Hub
     }
-
     stages {
-        stage('Checkout Code') {
+        stage('Clone Repository') {
             steps {
-                git branch: 'master', url: 'https://github.com/padmaraouppuluri123/DEMO.git'
+                git branch: 'master', url: "${REPO_URL}"
             }
         }
-
-        stage('Build') {
+        stage('Build Maven Project') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests'
             }
         }
-
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                sh 'mvn test'
+                sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
-
-        stage('Archive Artifacts') {
+        stage('Docker Login') {
             steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                script {
+                    // Login to Docker Hub using your credentials
+                    sh 'docker login -u padmaraouppuluri -p Welcome@123'
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    // Push the image to Docker Hub
+                    sh 'docker push ${DOCKER_IMAGE}'
+                }
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                sh 'docker run -d -p 8083:8080 ${DOCKER_IMAGE}'
             }
         }
     }
