@@ -24,8 +24,10 @@ pipeline {
             steps {
                 script {
                     // Login to Docker Hub using your credentials
+                    withDockerRegistry([credentialsId: 'dockerhub-credential', url: 'https://registry.hub.docker.com']) {
                     sh 'docker login -u padmaraouppuluri -p Welcome@123'
                 }
+                }  
             }
         }
         stage('Push Docker Image') {
