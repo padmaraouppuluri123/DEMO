@@ -1,7 +1,6 @@
-
 # Specify the Google Cloud provider
 provider "google" {
-  credentials = file("C:\Users\hr316\Downloads\helpful-silo-449805-t4-a518f0f8157c.json")  # Path to your GCP credentials JSON file
+  credentials = file("C:/Users/hr316/Downloads/helpful-silo-449805-t4-a518f0f8157c.json")  # Corrected file path
   project     = "helpful-silo-449805-t4"  # Replace with your actual Google Cloud project ID
   region      = "us-central1"         # Define the region, e.g., us-central1
 }
@@ -23,5 +22,6 @@ resource "google_compute_instance" "example-instance" {
     access_config {}  # Automatically assigns an external IP
   }
 }
+
 
 
