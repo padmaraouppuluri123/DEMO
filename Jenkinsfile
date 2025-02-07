@@ -30,6 +30,36 @@ pipeline {
                 }
             }
         }
+
+        stage('Terraform Init') {
+            steps {
+                script {
+                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=${env.GCP_CREDENTIALS}"]) {
+                        sh 'terraform init'
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=${env.GCP_CREDENTIALS}"]) {
+                        sh 'terraform plan -out=tfplan'
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=${env.GCP_CREDENTIALS}"]) {
+                        sh 'terraform apply -auto-approve tfplan'
+                    }
+                }
+            }
+        }
         stage('Run Docker Container') {
             steps {
                 sh 'docker run -d -p 8083:8080 ${DOCKER_IMAGE}'
