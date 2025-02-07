@@ -30,7 +30,11 @@ pipeline {
                 }
             }
         }
-
+        stage('Run Docker Container') {
+            steps {
+                sh 'docker run -d -p 8083:8080 ${DOCKER_IMAGE}'
+            }
+        }
         stage('Terraform Init') {
             steps {
                 script {
@@ -60,10 +64,6 @@ pipeline {
                 }
             }
         }
-        stage('Run Docker Container') {
-            steps {
-                sh 'docker run -d -p 8083:8080 ${DOCKER_IMAGE}'
-            }
-        }
+        
     }
 }
