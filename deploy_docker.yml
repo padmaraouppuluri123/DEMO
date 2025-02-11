@@ -1,42 +1,13 @@
 ---
-- name: Deploy Dockerized Application
+name: Deploy Dockerized Application
   hosts: localhost
   become: yes
   tasks:
-  
-    - name: Update apt cache
+    - name: Ensure Docker is installed
       apt:
+        name: docker.io
+        state: present
         update_cache: yes
-
-    - name: Install required dependencies
-      apt:
-        name:
-          - ca-certificates
-          - curl
-          - gnupg
-        state: present
-
-    - name: Add Docker GPG key
-      shell: |
-        install -m 0755 -d /etc/apt/keyrings
-        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null
-        chmod a+r /etc/apt/keyrings/docker.asc
-      args:
-        executable: /bin/bash
-
-    - name: Add Docker repository
-      shell: |
-        echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bookworm stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      args:
-        executable: /bin/bash
-
-    - name: Install Docker
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-        state: present
 
     - name: Ensure Docker service is running
       service:
@@ -44,39 +15,23 @@
         state: started
         enabled: yes
 
-    - name: Verify Docker Installation
-      command: docker --version
-      register: docker_version
-      changed_when: false
-
-    - name: Print Docker Version
-      debug:
-        msg: "Docker Version: {{ docker_version.stdout }}"
-
     - name: Pull Docker image
-      community.docker.docker_image:
-        name: "{{ docker_image }}"
-        source: pull
+      command: docker pull {{ docker_image }}
 
     - name: Stop and remove existing container (if running)
-      community.docker.docker_container:
-        name: demo-app
-        state: absent
+      shell: |
+        docker stop demo-app || true
+        docker rm demo-app || true
       ignore_errors: yes
 
     - name: Run Docker container
-      community.docker.docker_container:
-        name: demo-app
-        image: "{{ docker_image }}"
-        ports:
-          - "8082:8080"
-        state: started
-
-    - name: Print Running Containers
-      command: docker ps
-      register: running_containers
-      changed_when: false
-
-    - name: Debug Running Containers
-      debug:
-        msg: "{{ running_containers.stdout }}"
+      command: docker run -d --name demo-app -p 8082:8080 {{ docker_image }}
+stage('Run Ansible Playbook') {
+            steps {
+                script {
+                    sh """
+                        ansible-playbook deploy_docker.yml -e "docker_image=${DOCKER_IMAGE}"
+                    """
+                }
+            }
+    }
