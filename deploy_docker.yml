@@ -3,11 +3,27 @@
   hosts: localhost
   become: yes
   tasks:
-    - name: Ensure Docker is installed
-      apt:
-        name: docker.io
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
         state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian bookworm stable"
+        state: present
+
+    - name: Update apt cache
+      apt:
         update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
 
     - name: Ensure Docker service is running
       service:
@@ -16,13 +32,20 @@
         enabled: yes
 
     - name: Pull Docker image
-      command: docker pull {{ docker_image }}
+      community.docker.docker_image:
+        name: "{{ docker_image }}"
+        source: pull
 
     - name: Stop and remove existing container (if running)
-      shell: |
-        docker stop demo-app || true
-        docker rm demo-app || true
+      community.docker.docker_container:
+        name: demo-app
+        state: absent
       ignore_errors: yes
 
     - name: Run Docker container
-      command: docker run -d --name demo-app -p 8082:8080 {{ docker_image }}
+      community.docker.docker_container:
+        name: demo-app
+        image: "{{ docker_image }}"
+        ports:
+          - "8082:8080"
+        state: started
