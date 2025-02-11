@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         REPO_URL = 'https://github.com/padmaraouppuluri123/DEMO.git'
-        DOCKER_IMAGE = 'padmaraouppuluri/padmaraodocker:image'  // Docker image in Docker Hub
+        DOCKER_IMAGE = 'padmaraouppuluri/padmaraodocker:image' // Docker image in Docker Hub
     }
     stages {
         stage('Clone Repository') {
@@ -10,31 +10,35 @@ pipeline {
                 git branch: 'master', url: "${REPO_URL}"
             }
         }
+        
         stage('Build Maven Project') {
             steps {
                 sh 'mvn clean package -DskipTests'
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t ${DOCKER_IMAGE} .'
             }
-
         }
+
         stage('Push Docker Image') {
             steps {
                 script {
                     withDockerRegistry([credentialsId: 'dockerhub-credential', url: 'https://registry.hub.docker.com']) {
-                    // Push the image to Docker Hub
-                    sh 'docker push ${DOCKER_IMAGE}'
+                        sh 'docker push ${DOCKER_IMAGE}' // Push the image to Docker Hub
+                    }
                 }
             }
         }
+
         stage('Run Docker Container') {
             steps {
                 sh 'docker run -d -p 8083:8080 ${DOCKER_IMAGE}'
             }
         }
+
         stage('Terraform Init') {
             steps {
                 script {
@@ -64,14 +68,13 @@ pipeline {
                 }
             }
         }
+
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                    sh """
-                        ansible-playbook deploy_docker.yml -e "docker_image=${DOCKER_IMAGE}"
-                    """
+                    sh 'ansible-playbook deploy_docker.yml -e "docker_image=${DOCKER_IMAGE}"'
                 }
             }
-    }
+        }
     }
 }
