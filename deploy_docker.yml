@@ -1,5 +1,5 @@
 ---
-name: Deploy Dockerized Application
+- name: Deploy Dockerized Application
   hosts: localhost
   become: yes
   tasks:
@@ -16,22 +16,19 @@ name: Deploy Dockerized Application
         enabled: yes
 
     - name: Pull Docker image
-      command: docker pull {{ docker_image }}
+      community.docker.docker_image:
+        name: "{{ docker_image }}"
+        source: pull
 
     - name: Stop and remove existing container (if running)
-      shell: |
-        docker stop demo-app || true
-        docker rm demo-app || true
-      ignore_errors: yes
+      community.docker.docker_container:
+        name: demo-app
+        state: absent
 
     - name: Run Docker container
-      command: docker run -d --name demo-app -p 8082:8080 {{ docker_image }}
-stage('Run Ansible Playbook') {
-            steps {
-                script {
-                    sh """
-                        ansible-playbook deploy_docker.yml -e "docker_image=${DOCKER_IMAGE}"
-                    """
-                }
-            }
-    }
+      community.docker.docker_container:
+        name: demo-app
+        image: "{{ docker_image }}"
+        state: started
+        ports:
+          - "8082:8080"
