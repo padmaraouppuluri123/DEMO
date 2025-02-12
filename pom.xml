@@ -14,7 +14,6 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
-    <!-- ✅ Fix: Dependencies should be inside <dependencies> -->
     <dependencies>
         <!-- Spring Boot Starter -->
         <dependency>
@@ -30,7 +29,7 @@
             <version>3.2.2</version>
         </dependency>
 
-        <!-- ✅ Fix: Added missing version -->
+        <!-- Spring Boot Starter Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -49,11 +48,18 @@
 
     <build>
         <plugins>
-            <!-- Spring Boot Maven Plugin -->
+            <!-- ✅ Spring Boot Maven Plugin (Creates Fat JAR) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.2.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Compiler Plugin -->
@@ -67,7 +73,7 @@
                 </configuration>
             </plugin>
 
-            <!-- JAR Plugin -->
+            <!-- ✅ JAR Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
