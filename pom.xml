@@ -9,44 +9,75 @@
     <packaging>jar</packaging>
 
     <properties>
-        <!-- Specify the Java version you are using -->
-        <maven.compiler.source>1.8</maven.compiler.source> <!-- Java source version -->
-        <maven.compiler.target>1.8</maven.compiler.target> <!-- Java target version -->
+        <java.version>17</java.version>  <!-- Use Java 17 or the version you have installed -->
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <dependencies>
-        <!-- JUnit Dependency for JUnit 4 -->
+        <!-- Spring Boot Starter (Essential for Spring Boot Applications) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>3.2.2</version>  <!-- Update to the latest stable version -->
+        </dependency>
+
+        <!-- Spring Boot Web Starter (Required for Web API) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+        <!-- Spring Boot Starter Test (Optional - for unit tests) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit Dependency for Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version> <!-- Latest JUnit 4 version -->
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin (Needed for Running Spring Boot Apps) -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.2.2</version>
+            </plugin>
+
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version> <!-- Plugin version -->
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source> <!-- Specify Java source version -->
-                    <target>1.8</target> <!-- Specify Java target version -->
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
-          <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.0</version>
-        <configuration>
-                <archive>
-                    <manifest>
-                        <mainClass>com.example.App</mainClass> <!-- Replace with your main class -->
-                    </manifest>
-                </archive>
-            </configuration>
-        </plugin>
+
+            <!-- JAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.example.App</mainClass> <!-- Ensure your main class is correct -->
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
