@@ -73,4 +73,4 @@
       ignore_errors: yes
 
     - name: Run Docker container
-      command: docker run -d --name padmarao_container -p 8082:8080 padmaraouppuluri/padmaraodocker
+      command: docker run -d --name padmarao_container -p 8082:8080 padmaraouppuluri/padmaraodocker:image
