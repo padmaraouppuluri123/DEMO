@@ -64,7 +64,7 @@
       no_log: true
 
     - name: Pull Docker image
-      command: docker pull padmaraouppuluri/padmaraodocker
+      command: docker pull padmaraouppuluri/padmaraodocker:image
 
     - name: Stop and remove any existing container
       shell: |
