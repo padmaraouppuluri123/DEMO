@@ -3,7 +3,6 @@
   hosts: localhost
   become: yes
   tasks:
-
     - name: Update APT cache
       apt:
         update_cache: yes
@@ -67,10 +66,13 @@
     - name: Build Docker image
       command: docker build -t padmaraouppuluri/padmaraodocker:latest .
       args:
-        chdir: /path/to/your/application  # Change this to the actual app path
+        chdir: /home/padmaraodevops/my-docker-app
 
     - name: Push Docker image to Docker Hub
       command: docker push padmaraouppuluri/padmaraodocker:latest
+
+    - name: Pull Docker image
+      command: docker pull padmaraouppuluri/padmaraodocker:latest
 
     - name: Stop and remove any existing container
       shell: |
