@@ -3,11 +3,40 @@
   hosts: localhost
   become: yes
   tasks:
-    - name: Ensure Docker is installed
+    - name: Update APT cache
       apt:
-        name: docker.io
-        state: present
         update_cache: yes
+
+    - name: Install required packages for Docker
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+
+    - name: Add Docker GPG key
+      shell: |
+        install -m 0755 -d /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/debian/gpg | tee /etc/apt/keyrings/docker.asc > /dev/null
+        chmod a+r /etc/apt/keyrings/docker.asc
+      args:
+        executable: /bin/bash
+
+    - name: Add Docker repository
+      shell: |
+        echo "deb [signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+      args:
+        executable: /bin/bash
+
+    - name: Update APT cache again
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
 
     - name: Ensure Docker service is running
       service:
@@ -15,20 +44,19 @@
         state: started
         enabled: yes
 
-    - name: Pull Docker image
-      community.docker.docker_image:
-        name: "{{ docker_image }}"
-        source: pull
+    - name: Log in to Docker Hub
+      shell: |
+        echo "dckr_pat_9Y0QPnZZd0mD0SxMSrusUrDJgVc" | docker login -u padmaraouppuluri --password-stdin
+      no_log: true
 
-    - name: Stop and remove existing container (if running)
-      community.docker.docker_container:
-        name: demo-app
-        state: absent
+    - name: Pull Docker image
+      command: docker pull padmaraouppuluri/padmaraodocker
+
+    - name: Stop and remove any existing container
+      shell: |
+        docker stop padmarao_container || true
+        docker rm padmarao_container || true
+      ignore_errors: yes
 
     - name: Run Docker container
-      community.docker.docker_container:
-        name: demo-app
-        image: "{{ docker_image }}"
-        state: started
-        ports:
-          - "8082:8080"
+      command: docker run -d --name padmarao_container -p 8082:8080 padmaraouppuluri/padmaraodocker
