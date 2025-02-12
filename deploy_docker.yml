@@ -63,6 +63,11 @@
       shell: echo "dckr_pat_9Y0QPnZZd0mD0SxMSrusUrDJgVc" | docker login -u padmaraouppuluri --password-stdin
       no_log: true
 
+    - name: Build Docker image
+      command: docker build -t padmaraouppuluri/padmaraodocker:latest .
+      args:
+        chdir: /home/padmaraodevops/my-docker-app
+
     - name: Pull Docker image
       command: docker pull padmaraouppuluri/padmaraodocker:image
 
