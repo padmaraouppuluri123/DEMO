@@ -4,6 +4,6 @@ provider "google" {
 }
 
 resource "google_storage_bucket" "my_bucket" {
-  name          = "bucket888-padmarao"
+  name          = "bucket8889-padmarao"
   location      = "US"
 }
