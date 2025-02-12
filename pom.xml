@@ -3,6 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ✅ Spring Boot Parent (Manages Versions) -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.2</version>
+        <relativePath/> <!-- Prevents Maven from looking for local parent -->
+    </parent>
+
     <groupId>com.example</groupId>
     <artifactId>my-java-app</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -13,7 +21,7 @@
     </properties>
 
     <dependencies>
-        <!-- ✅ Spring Boot Starter (Includes Logback) -->
+        <!-- ✅ Spring Boot Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -25,21 +33,20 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- ✅ Compatible Logback Version -->
+        <!-- ✅ Logback (Spring Boot 3.x Compatible) -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.14</version>
         </dependency>
 
-        <!-- ✅ Spring Boot Starter Test -->
+        <!-- ✅ Spring Boot Test Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- ✅ JUnit -->
+        <!-- ✅ JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -49,7 +56,7 @@
 
     <build>
         <plugins>
-            <!-- ✅ Spring Boot Maven Plugin (For Fat JAR) -->
+            <!-- ✅ Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -69,6 +76,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
