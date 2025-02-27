@@ -62,11 +62,11 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- ✅ Compiler Plugin (Updated Version) -->
+            <!-- ✅ Compiler Plugin (Stable Version) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.1</version>  <!-- ✅ Updated to latest version -->
+                <version>3.8.1</version>  <!-- ✅ Downgraded for stability -->
                 <configuration>
                     <release>21</release>
                 </configuration>
