@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: demo-app-deployment
-  namespace: autopilot-cluster-sm
+  namespace: autopilot-cluster-sm  # Ensure this namespace exists in GKE
   labels:
     app: demo-app
 spec:
@@ -17,35 +17,7 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: "padmaraouppuluri/padmaraodocker:image"
-          imagePullPolicy: IfNotPresent
+          image: "padmaraouppuluri/padmaraodocker:image"  # Updated Docker image repo
+          imagePullPolicy: IfNotPresent  # Ensures it doesn't pull unnecessarily
           ports:
             - containerPort: 80
-          command: ["java", "-jar", "app.jar"]  # Ensure app.jar is in the container
-
-          resources:
-            requests:
-              cpu: "250m"
-              memory: "512Mi"
-              ephemeral-storage: "500Mi"
-            limits:
-              cpu: "500m"
-              memory: "1Gi"
-              ephemeral-storage: "1Gi"
-
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 10
-
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 10
-
-      imagePullSecrets:
-        - name: regcred
