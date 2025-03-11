@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service12
+  name: my-app-service12-blue  # Use a distinct name for the blue service
   labels:
     harness.io/color: blue  # Label for the blue service
 spec:
