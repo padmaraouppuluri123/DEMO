@@ -1,25 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app-deployment-green  # Use a distinct name for the green deployment
+  name: my-app-deployment-green  # Unique name for green deployment
   labels:
     app: my-app
-  annotations:
-    harness.io/direct-apply: "true"  # Ensures the green version is directly applied
+    harness.io/color: green  # Label to distinguish the green version
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: my-app
-      harness.io/color: green  # Label for the green version of the service
+      harness.io/color: green  # Ensure this label matches the one in your service
   template:
     metadata:
       labels:
         app: my-app
-        harness.io/color: green  # Label for the green version of the service
+        harness.io/color: green  # Label to indicate this is the green version of the service
     spec:
       containers:
         - name: my-app
-          image: "nasi101/tetris"  # Replace with your image
+          image: "nasi101/tetris"  # Replace with the actual image you are using
           ports:
             - containerPort: 8080
