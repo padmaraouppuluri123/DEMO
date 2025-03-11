@@ -1,15 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service12-green  # Use a distinct name for the green service
+  name: my-app-service12-green  # Unique name for the green service
   labels:
-    harness.io/color: green  # Label for the green service
-  annotations:
-    harness.io/direct-apply: "true"  # Direct apply for the green service (bypasses Blue/Green workflow)
+    harness.io/color: green  # Label to differentiate the green version
 spec:
   selector:
     app: my-app
-    harness.io/color: green  # Select the green deployment
+    harness.io/color: green  # Ensure this matches the label in your green deployment
   ports:
     - protocol: TCP
       port: 80
