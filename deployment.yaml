@@ -43,8 +43,6 @@ metadata:
   name: my-app-deployment-stage
   labels:
     app: my-app
-  annotations:
-    harness.io/direct-apply: true  # This annotation ensures direct apply for the green deployment (bypasses Blue/Green workflow)
 spec:
   replicas: 2
   selector:
@@ -68,8 +66,6 @@ metadata:
   name: my-app-service12-stage
   labels:
     harness.io/color: green  # Label for the green service
-  annotations:
-    harness.io/direct-apply: true  # This annotation ensures direct apply for the green service (bypasses Blue/Green workflow)
 spec:
   selector:
     app: my-app
