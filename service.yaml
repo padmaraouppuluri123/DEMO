@@ -17,11 +17,27 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: my-app-service12
+  labels:
+    harness.io/color: blue  # Label for the blue service
+spec:
+  selector:
+    app: my-app
+    harness.io/color: blue  # Select the blue deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
+  type: LoadBalancer  # Exposes the app to external traffic
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: my-app-service12-stage
   labels:
     harness.io/color: green  # Label for the green service
   annotations:
-    harness.io/direct-apply: true  # This annotation ensures direct apply for the green service (bypasses Blue/Green workflow)
+    harness.io/direct-apply: "true"  # Ensure the value is a string
 spec:
   selector:
     app: my-app
@@ -31,3 +47,26 @@ spec:
       port: 80
       targetPort: 8081
   type: LoadBalancer  # Exposes the app to external traffic
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-deployment
+  labels:
+    app: my-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+        harness.io/color: blue  # Label for the blue version of the service
+    spec:
+      containers:
+        - name: my-app
+          image: "nasi101/tetris"  # Update to your specific image if necessary
+          ports:
+            - containerPort: 8080
