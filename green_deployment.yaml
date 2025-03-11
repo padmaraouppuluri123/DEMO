@@ -1,16 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app-deployment-stage
+  name: my-app-deployment-green  # Use a distinct name for the green deployment
   labels:
     app: my-app
   annotations:
-    harness.io/direct-apply: true  # This annotation ensures direct apply for the green deployment (bypasses Blue/Green workflow)
+    harness.io/direct-apply: "true"  # Ensures the green version is directly applied
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: my-app
+      harness.io/color: green  # Label for the green version of the service
   template:
     metadata:
       labels:
@@ -19,6 +20,6 @@ spec:
     spec:
       containers:
         - name: my-app
-          image: "nasi101/tetris"  # Update to your specific image if necessary
+          image: "nasi101/tetris"  # Replace with your image
           ports:
             - containerPort: 8080
