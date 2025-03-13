@@ -1,4 +1,14 @@
-1. What is Blue -green Deployement
+1. What is Blue-Green Deployment?
+When deploying a new version (green) of an application to the staging environment, if it succeeds, the traffic switches from blue to green. Now, the blue version becomes inactive, and the green version is the live version.
 
-When i am deploying new version (green) an application to staging environment , 
-if it success, now the traffic switches from blue to green... now the blue version is inactive and green version is the live version
+By using Blue-Green Deployment, there is zero downtime during the transition.
+
+2. What is Canary Deployment?
+Canary deployment is a strategy where a new feature or version is gradually rolled out to a small percentage of users before a full release.
+
+For example:
+
+You have a WhatsApp mobile app, and a voice message feature is implemented. Instead of rolling it out to all users at once, they first deploy the feature to 20 users. If it works fine, they increase the rollout to more users.
+
+This gradual increase is known as Canary Deployment.
+
