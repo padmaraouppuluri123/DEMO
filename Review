@@ -1,0 +1,4 @@
+1. What is Blue -green Deployement
+
+When i am deploying new version (green) an application to staging environment , 
+if it success, now the traffic switches from blue to green... now the blue version is inactive and green version is the live version
